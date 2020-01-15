@@ -2,7 +2,8 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const uuid = require('uuid');
 const bcrypt = require('bcrypt');
-const cors = require('cors')
+const cors = require('cors');
+// const the = require('./Database.js')
 const saltRounds = 10
 
 const app = express()
@@ -39,6 +40,7 @@ const database = {
         }
     ]
 }
+
 // GET 
 app.get('/', (req, res) => {
     res.json(database.users)
@@ -54,14 +56,15 @@ app.post('/register', (req, res) => {
             res.json(`You already have an account ${name}`)
             return ele
         }
-    }
-    bcrypt.genSalt(saltRounds, function (err, salt) {
-        bcrypt.hash(password, saltRounds, function (err, hash) {
+        bcrypt.genSalt(saltRounds, function (err, salt) {
+            bcrypt.hash(password, saltRounds, function (err, hash) {
+            });
         });
-    });
-    newUser = { id: uuid(), ...req.body, entries: 0, joined: new Date() }
-    database.users.push(newUser);
-    return newUser
+        newUser = { id: uuid(), ...req.body, entries: 0, joined: new Date() }
+        database.users.push(newUser);
+        return res.json(newUser)
+    }
+
 })
 
 // SIGN IN POST
@@ -93,7 +96,7 @@ app.get('/profile/:id', (req, res) => {
 
 /* LISTENING.... */
 app.listen(3001, () => {
-    // console.log("app is running on port 3000")
+    // console.log("app is running on port 3001")
 })
 
 /* API Framework
